@@ -1,7 +1,7 @@
 from typing import List, Optional
 from sqlalchemy.engine import result
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 
@@ -50,9 +50,10 @@ async def create_author(author: Author):
 @app.get("/authors/{author_id}", response_model=Author)
 async def read_author(author_id: int):
     with Session(engine) as session:
-        statement = select(Author).where(Author.id == author_id)
-        result = session.exec(statement).one()
-        return result
+        author = session.get(Author, author_id)
+        if not author:
+            raise HTTPException(status_code=404, detail="Author not found")
+        return author
 
 
 @app.get("/books", response_model=List[Book])
@@ -74,9 +75,10 @@ async def create_book(book: Book):
 @app.get("/books/{isbn}", response_model=Book)
 async def read_book(isbn: int):
     with Session(engine) as session:
-        statement = select(Book).where(Book.isbn == isbn)
-        result = session.exec(statement).one()
-        return result
+        book = session.get(Book, isbn)
+        if not book:
+            raise HTTPException(status_code=404, detail="Book not found")
+        return book
 
 
 def start():
