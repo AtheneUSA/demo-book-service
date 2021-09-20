@@ -6,6 +6,8 @@ authors = ["Ethan Harstad <eharstad@athene.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
+fastapi = "^0.68.1"
+uvicorn = {extras = ["standard"], version = "^0.15.0"}
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
@@ -14,3 +16,6 @@ black = "^21.9b0"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+start = "fastapi_template.main:start"

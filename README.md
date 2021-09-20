@@ -21,3 +21,13 @@ Then simply install the project dependencies.
 ```
 poetry install
 ```
+
+Start the application in development mode
+```
+poetry run uvicorn fastapi_template.main:app --reload
+```
+or with the configured run script.
+```
+poetry run start
+```
+Note: The reload option should not be configured in production and could be automatically toggled with a DEBUG envvar or similar.
