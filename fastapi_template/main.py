@@ -1,30 +1,30 @@
 from typing import List, Optional
+from sqlalchemy.engine import result
 import uvicorn
 from fastapi import FastAPI
 from pydantic import BaseModel
+from sqlmodel import Field, Session, SQLModel, create_engine, select
 
 app = FastAPI()
 
 
-class Author(BaseModel):
-    id: int
+class Author(SQLModel, table=True):
+    __tablename__ = "authors"
+    id: Optional[int] = Field(default=None, primary_key=True)
     name: str
 
 
-class Book(BaseModel):
-    isbn: int
+class Book(SQLModel, table=True):
+    __tablename__ = "books"
+    isbn: int = Field(primary_key=True)
     title: str
     author_id: int
 
 
-AUTHORS = {
-    1: Author(id=1, name="John Doe"),
-}
-
-BOOKS = {
-    123456789012: Book(isbn=123456789012, title="Foo Bar", author_id=1),
-}
-
+sqlite_file_name = "/Users/e72816/workspace/AtheneUSA/templates/fastapi-template/database.db"
+sqlite_url = f"sqlite:///{sqlite_file_name}"
+connect_args = {"check_same_thread": False}
+engine = create_engine(sqlite_url, echo=True, connect_args=connect_args)
 
 @app.get("/")
 async def read_root():
@@ -33,34 +33,50 @@ async def read_root():
 
 @app.get("/authors", response_model=List[Author])
 async def list_authors():
-    return list(AUTHORS.values())
+    with Session(engine) as session:
+        authors = session.exec(select(Author)).all()
+        return authors
 
 
 @app.post("/authors", response_model=Author)
 async def create_author(author: Author):
-    AUTHORS[author.id] = author
-    return author
+    with Session(engine) as session:
+        session.add(author)
+        session.commit()
+        session.refresh(author)
+        return author
 
 
 @app.get("/authors/{author_id}", response_model=Author)
 async def read_author(author_id: int):
-    return list(AUTHORS[author_id])
+    with Session(engine) as session:
+        statement = select(Author).where(Author.id == author_id)
+        result = session.exec(statement).one()
+        return result
 
 
 @app.get("/books", response_model=List[Book])
 async def list_books():
-    return list(BOOKS.values())
+    with Session(engine) as session:
+        books = session.exec(select(Book)).all()
+        return books
 
 
 @app.post("/books", response_model=Book)
 async def create_book(book: Book):
-    BOOKS[book.isbn] = book
-    return book
+    with Session(engine) as session:
+        session.add(book)
+        session.commit()
+        session.refresh(book)
+        return book
 
 
 @app.get("/books/{isbn}", response_model=Book)
 async def read_book(isbn: int):
-    return BOOKS[isbn]
+    with Session(engine) as session:
+        statement = select(Book).where(Book.isbn == isbn)
+        result = session.exec(statement).one()
+        return result
 
 
 def start():
