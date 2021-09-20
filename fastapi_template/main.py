@@ -8,11 +8,17 @@ from sqlmodel import Field, Session, SQLModel, create_engine, select
 app = FastAPI()
 
 
-class Author(SQLModel, table=True):
+class AuthorBase(SQLModel):
+    name: str
+class Author(AuthorBase, table=True):
     __tablename__ = "authors"
     id: Optional[int] = Field(default=None, primary_key=True)
-    name: str
 
+class AuthorCreate(AuthorBase):
+    pass
+
+class AuthorRead(AuthorBase):
+    id: int
 
 class Book(SQLModel, table=True):
     __tablename__ = "books"
@@ -39,21 +45,22 @@ async def read_root():
     return {"Hello": "World"}
 
 
-@app.get("/authors", response_model=List[Author])
+@app.get("/authors", response_model=List[AuthorRead])
 async def list_authors(session: Session = Depends(get_db_session)):
     authors = session.exec(select(Author)).all()
     return authors
 
 
-@app.post("/authors", response_model=Author)
-async def create_author(author: Author, session: Session = Depends(get_db_session)):
-    session.add(author)
+@app.post("/authors", response_model=AuthorRead)
+async def create_author(author: AuthorCreate, session: Session = Depends(get_db_session)):
+    db_author = Author.from_orm(author)
+    session.add(db_author)
     session.commit()
-    session.refresh(author)
-    return author
+    session.refresh(db_author)
+    return db_author
 
 
-@app.get("/authors/{author_id}", response_model=Author)
+@app.get("/authors/{author_id}", response_model=AuthorRead)
 async def read_author(author_id: int, session: Session = Depends(get_db_session)):
     author = session.get(Author, author_id)
     if not author:
