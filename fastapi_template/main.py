@@ -21,10 +21,13 @@ class Book(SQLModel, table=True):
     author_id: int
 
 
-sqlite_file_name = "/Users/e72816/workspace/AtheneUSA/templates/fastapi-template/database.db"
+sqlite_file_name = (
+    "/Users/e72816/workspace/AtheneUSA/templates/fastapi-template/database.db"
+)
 sqlite_url = f"sqlite:///{sqlite_file_name}"
 connect_args = {"check_same_thread": False}
 engine = create_engine(sqlite_url, echo=True, connect_args=connect_args)
+
 
 @app.get("/")
 async def read_root():
@@ -56,6 +59,17 @@ async def read_author(author_id: int):
         return author
 
 
+@app.delete("/authors/{author_id}")
+async def delete_author(author_id: int):
+    with Session(engine) as session:
+        author = session.get(Author, author_id)
+        if not author:
+            raise HTTPException(status_code=404, detail="Author not found")
+        session.delete(author)
+        session.commit()
+        return {"ok": True}
+
+
 @app.get("/books", response_model=List[Book])
 async def list_books():
     with Session(engine) as session:
@@ -79,6 +93,17 @@ async def read_book(isbn: int):
         if not book:
             raise HTTPException(status_code=404, detail="Book not found")
         return book
+
+
+@app.delete("/books/{isbn}")
+async def delete_book(isbn: int):
+    with Session(engine) as session:
+        book = session.get(Book, isbn)
+        if not book:
+            raise HTTPException(status_code=404, detail="Book not found")
+        session.delete(book)
+        session.commit()
+        return {"ok": True}
 
 
 def start():
