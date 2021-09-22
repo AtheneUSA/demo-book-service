@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "fastapi-template"
+name = "book-service"
 version = "0.1.0"
 description = ""
 authors = ["Ethan Harstad <eharstad@athene.com>"]
@@ -19,4 +19,4 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-start = "fastapi_template.main:start"
+start = "book_service.main:start"

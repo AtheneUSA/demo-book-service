@@ -43,7 +43,7 @@ class BookRead(BookBase):
 AuthorReadWithBooks.update_forward_refs()
 
 sqlite_file_name = (
-    "/Users/e72816/workspace/AtheneUSA/templates/fastapi-template/database.db"
+    "/Users/e72816/workspace/AtheneUSA/microservice-demo/book-service/database.db"
 )
 sqlite_url = f"sqlite:///{sqlite_file_name}"
 connect_args = {"check_same_thread": False}
@@ -128,7 +128,7 @@ async def delete_book(isbn: int, session: Session = Depends(get_db_session)):
 
 
 def start():
-    uvicorn.run("fastapi_template.main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("book_service.main:app", host="0.0.0.0", port=8000, reload=True)
 
 
 if __name__ == "__main__":
