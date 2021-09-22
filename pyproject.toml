@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "book-service"
 version = "0.1.0"
-description = ""
+description = "bookstore book info service"
 authors = ["Ethan Harstad <eharstad@athene.com>"]
 
 [tool.poetry.dependencies]

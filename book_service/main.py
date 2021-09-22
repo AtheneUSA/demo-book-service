@@ -1,12 +1,11 @@
 from typing import List, Optional
-from sqlalchemy.engine import result
 import uvicorn
 from fastapi import Depends, FastAPI, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseSettings
 from sqlmodel import Field, Relationship, Session, SQLModel, create_engine, select
 
-app = FastAPI()
-
+class Settings(BaseSettings):
+    database_uri: str = "sqlite:///./books.db"
 
 class AuthorBase(SQLModel):
     name: str
@@ -42,12 +41,11 @@ class BookRead(BookBase):
 
 AuthorReadWithBooks.update_forward_refs()
 
-sqlite_file_name = (
-    "/Users/e72816/workspace/AtheneUSA/microservice-demo/book-service/database.db"
-)
-sqlite_url = f"sqlite:///{sqlite_file_name}"
+settings = Settings()
+app = FastAPI()
+
 connect_args = {"check_same_thread": False}
-engine = create_engine(sqlite_url, echo=True, connect_args=connect_args)
+engine = create_engine(settings.database_uri, echo=True, connect_args=connect_args)
 
 
 def get_db_session():
