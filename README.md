@@ -1,6 +1,6 @@
-# FastAPI Template
+# Demo Book Service
 
-This repository serves as a demo for several Python libraries and design best practices.
+This repository serves as a demo for several Python libraries and design best practices as part of Athene Advance 2021.
 
 ## Features
 
