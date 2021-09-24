@@ -6,40 +6,52 @@ from fastapi import Depends, FastAPI, HTTPException
 from pydantic import BaseSettings
 from sqlmodel import Field, Relationship, Session, SQLModel, create_engine, select
 
+
 class Settings(BaseSettings):
     database_uri: str = "sqlite:///./books.db"
 
+
 class AuthorBase(SQLModel):
     name: str
+
+
 class Author(AuthorBase, table=True):
     __tablename__ = "authors"
     id: Optional[int] = Field(default=None, primary_key=True)
     books: List["Book"] = Relationship(back_populates="author")
 
+
 class AuthorCreate(AuthorBase):
     pass
 
+
 class AuthorRead(AuthorBase):
     id: int
+
 
 class AuthorReadWithBooks(AuthorBase):
     id: int
     books: List["BookBase"]
 
+
 class BookBase(SQLModel):
     isbn: int = Field(primary_key=True)
     title: str
+
 
 class Book(BookBase, table=True):
     __tablename__ = "books"
     author_id: int = Field(foreign_key="authors.id")
     author: Author = Relationship(back_populates="books")
 
+
 class BookCreate(BookBase):
     author_id: int = Field(foreign_key="authors.id")
 
+
 class BookRead(BookBase):
     author: AuthorRead
+
 
 AuthorReadWithBooks.update_forward_refs()
 
@@ -72,7 +84,9 @@ async def list_authors(session: Session = Depends(get_db_session)):
 
 
 @app.post("/authors", response_model=AuthorRead)
-async def create_author(author: AuthorCreate, session: Session = Depends(get_db_session)):
+async def create_author(
+    author: AuthorCreate, session: Session = Depends(get_db_session)
+):
     db_author = Author.from_orm(author)
     session.add(db_author)
     session.commit()
