@@ -20,7 +20,7 @@ pipeline {
 
   environment {
     ARTIFACTORY_URL = "athenedtr-non-prod.artifactory.onintranet.com"
-    IMAGE_TAG = "real-time-integration/call-monitor"
+    IMAGE_TAG = "microservices-demo/book-service"
     SHORT_GIT_REV = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
   }
 
