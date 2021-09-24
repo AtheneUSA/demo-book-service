@@ -9,6 +9,7 @@ python = "^3.7"
 fastapi = "^0.68.1"
 uvicorn = {extras = ["standard"], version = "^0.15.0"}
 sqlmodel = "^0.0.4"
+ecs-logging = "^1.0.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

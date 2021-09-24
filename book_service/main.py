@@ -1,3 +1,5 @@
+import logging
+import ecs_logging
 from typing import List, Optional
 import uvicorn
 from fastapi import Depends, FastAPI, HTTPException
@@ -41,6 +43,10 @@ class BookRead(BookBase):
 
 AuthorReadWithBooks.update_forward_refs()
 
+logging.config.fileConfig("logging.conf", disable_existing_loggers=True)
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
 settings = Settings()
 app = FastAPI()
 
@@ -61,6 +67,7 @@ async def read_root():
 @app.get("/authors", response_model=List[AuthorRead])
 async def list_authors(session: Session = Depends(get_db_session)):
     authors = session.exec(select(Author)).all()
+    logger.debug(f"Got {len(authors)} authors from database")
     return authors
 
 
