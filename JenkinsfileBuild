@@ -51,7 +51,7 @@ pipeline {
       steps {
         container('docker') {
           script{
-            docker.withRegistry( "${ARTIFACTORY_URL}", "svc_jenkins" ) {
+            docker.withRegistry( "http://${ARTIFACTORY_URL}", "svc_jenkins" ) {
               sh """
                 docker push ${ARTIFACTORY_URL}/${IMAGE_TAG}:${SHORT_GIT_REV}
               """
