@@ -3,6 +3,7 @@ import ecs_logging
 from typing import List, Optional
 import uvicorn
 from fastapi import Depends, FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseSettings
 from sqlmodel import Field, Relationship, Session, SQLModel, create_engine, select
 
@@ -61,6 +62,18 @@ logger.setLevel(logging.DEBUG)
 
 settings = Settings()
 app = FastAPI()
+
+origins = [
+    '*',
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*'],
+)
 
 connect_args = {"check_same_thread": False}
 engine = create_engine(settings.database_uri, echo=True, connect_args=connect_args)
