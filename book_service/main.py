@@ -13,10 +13,19 @@ from sqlmodel import Field, Relationship, Session, SQLModel, create_engine, sele
 
 class Settings(BaseSettings):
     database_uri: str = "sqlite:///./books.db"
+<<<<<<< HEAD
     database_user: Optional[str]
     database_pass: Optional[str]
     echo_sql: bool = False
     root_path: Optional[str]
+=======
+    elastic_apm_enabled: str = "true"  # (true|false)
+    elastic_apm_log_level: str  # One of: (off|critical|error|warning|info|debug|trace)
+    elastic_apm_recording: str = "true"  # (true|false)
+    elastic_apm_server_url: str
+    elastic_apm_service_name: str
+    elastic_apm_verify_server_cert: str = "True"  # (True|False)
+>>>>>>> 6e71d4e (add required environment variables to `Settings` object)
 
 
 class AuthorBase(SQLModel):
