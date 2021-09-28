@@ -10,7 +10,7 @@ fastapi = "^0.68.1"
 uvicorn = {extras = ["standard"], version = "^0.15.0"}
 sqlmodel = "^0.0.4"
 ecs-logging = "^1.0.2"
-elastic-apm = "6.4.0"
+elastic-apm = "^6.4.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
