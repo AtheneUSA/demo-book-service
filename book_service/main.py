@@ -2,6 +2,8 @@ import logging
 import ecs_logging
 from typing import List, Optional
 import uvicorn
+
+from elasticapm.contrib.starlette import make_apm_client, ElasticAPM
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseSettings
@@ -61,18 +63,20 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 settings = Settings()
+apm = make_apm_client()
 app = FastAPI()
+app.add_middleware(ElasticAPM, client=apm)
 
 origins = [
-    '*',
+    "*",
 ]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=['*'],
-    allow_headers=['*'],
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 connect_args = {"check_same_thread": False}
