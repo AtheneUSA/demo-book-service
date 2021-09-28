@@ -5,6 +5,7 @@ This repository serves as a demo for several Python libraries and design best pr
 ## Features
 
 - [FastAPI](https://fastapi.tiangolo.com/) Python web framework
+- [Elastic APM](https://www.elastic.co/guide/en/apm/agent/python/current/index.html) Application monitoring
 - [SQLModel](https://sqlmodel.tiangolo.com/) Python SQL ORM
 - [Poetry](https://python-poetry.org/) Python dependency management
 - [12 Factor](https://12factor.net/) design principles
