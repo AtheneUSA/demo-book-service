@@ -3,4 +3,4 @@ name: book-service
 description: A demo microservice
 type: application
 version: 0.1.0
-appVersion: "1c555d8"
+appVersion: "af6b30c"

@@ -1,3 +1,14 @@
+apm:
+  enabled: "true"
+  serverUrl: "https://elk.onintranet.com:8200"
+  verifyServerCert: "false"
+  log:
+    ecsFormatting: "off"
+    file: "demo-book-service.log"
+    fileSize: "16mb"
+    level: "info"
+    recording: "true"
+
 service:
   type: ClusterIP
   port: 80

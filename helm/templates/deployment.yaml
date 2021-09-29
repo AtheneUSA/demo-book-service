@@ -35,6 +35,27 @@ spec:
       - name: book-service
         image: athenedtr-non-prod.artifactory.onintranet.com/microservices-demo/book-service:{{ .Chart.AppVersion }}
         imagePullPolicy: IfNotPresent
+        env:
+        - name: ELASTIC_APM_ENABLED
+          value: {{ .Values.apm.enabled | quote }}
+        - name: ELASTIC_APM_ENVIRONMENT
+          value: {{ .Values.environment | quote }}
+        - name: ELASTIC_APM_LOG_ECS_FORMATTING
+          value: {{ .Values.apm.log.ecsFormatting | quote }}
+        - name: ELASTIC_APM_LOG_FILE
+          value: {{ .Values.apm.log.file | quote }}
+        - name: ELASTIC_APM_LOG_FILE_SIZE
+          value: {{ .Values.apm.log.fileSize | quote }}
+        - name: ELASTIC_APM_LOG_LEVEL
+          value: {{ .Values.apm.log.level | quote }}
+        - name: ELASTIC_APM_LOG_RECORDING
+          value: {{ .Values.apm.log.recording | quote }}
+        - name: ELASTIC_APM_SERVER_URL
+          value: {{ .Values.apm.serverUrl | quote }}
+        - name: ELASTIC_APM_SERVICE_NAME
+          value: book-service
+        - name: ELASTIC_APM_VERIFY_SERVER_CERT
+          value: {{ .Values.apm.verifyServerCert | quote }}
         ports:
         - name: http
           containerPort: 8000
