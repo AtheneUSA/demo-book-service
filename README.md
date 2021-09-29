@@ -26,10 +26,15 @@ poetry install
 
 Start the application in development mode
 ```
-poetry run uvicorn fastapi_template.main:app --reload
+poetry run uvicorn book_service.main:app --reload
 ```
 or with the configured run script.
 ```
 poetry run start
 ```
 Note: The reload option should not be configured in production and could be automatically toggled with a DEBUG envvar or similar.
+
+Deploy to dev environment in EKS
+```
+helm upgrade book-service-dev helm --values helm/values/dev.yaml -i -n microservice-demo
+```
