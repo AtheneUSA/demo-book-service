@@ -6,6 +6,7 @@ import uvicorn
 from elasticapm.contrib.starlette import make_apm_client, ElasticAPM
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi_health import health
 from pydantic import BaseSettings
 from sqlmodel import Field, Relationship, Session, SQLModel, create_engine, select
 
@@ -87,6 +88,16 @@ def get_db_session():
     with Session(engine) as session:
         yield session
 
+
+def is_database_online(session: Session = Depends(get_db_session)):
+    try:
+        session.execute('SELECT 1')
+    except Exception:
+        return False
+    return True
+
+
+app.add_api_route("/healthz", health([is_database_online]))
 
 @app.get("/")
 async def read_root():

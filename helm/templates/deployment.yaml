@@ -39,6 +39,18 @@ spec:
         - name: http
           containerPort: 8000
           protocol: TCP
+        livenessProbe:
+          initialDelaySeconds: 15
+          periodSeconds: 15
+          httpGet:
+            path: /healthz
+            port: http
+        readinessProbe:
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          httpGet:
+            path: /healthz
+            port: http
         resources:
           limits:
             cpu: 200m
