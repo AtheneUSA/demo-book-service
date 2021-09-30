@@ -8,17 +8,18 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: book-service
-      app.kubernetes.io/instance: book-service
+      app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       annotations:
+        sidecar.istio.io/rewriteAppHTTPProbers: "false"
         co.elastic.logs.book-service/enabled: "true"
         co.elastic.logs.book-service/json.add_error_key: "true"
         co.elastic.logs.book-service/json.keys_under_root: "true"
         com.onintranet.elk/service_id: "c02fe809-89f3-49f6-8973-5b0e06c11424"
       labels:
         app.kubernetes.io/name: book-service
-        app.kubernetes.io/instance: book-service
+        app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/version: {{ .Chart.AppVersion }}
         app.kubernetes.io/component: api
         app.kubernetes.io/part-of: demo-microservice
