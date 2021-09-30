@@ -13,6 +13,8 @@ from sqlmodel import Field, Relationship, Session, SQLModel, create_engine, sele
 
 class Settings(BaseSettings):
     database_uri: str = "sqlite:///./books.db"
+    echo_sql: bool = False
+    root_path: Optional[str]
 
 
 class AuthorBase(SQLModel):
@@ -65,7 +67,7 @@ logger.setLevel(logging.DEBUG)
 
 settings = Settings()
 apm = make_apm_client()
-app = FastAPI()
+app = FastAPI(root_path=settings.root_path)
 app.add_middleware(ElasticAPM, client=apm)
 
 origins = [
@@ -81,7 +83,7 @@ app.add_middleware(
 )
 
 connect_args = {"check_same_thread": False}
-engine = create_engine(settings.database_uri, echo=True, connect_args=connect_args)
+engine = create_engine(settings.database_uri, echo=False, connect_args=connect_args)
 
 
 def get_db_session():

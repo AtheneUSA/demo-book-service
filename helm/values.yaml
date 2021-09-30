@@ -1,3 +1,6 @@
+echoSql: False
+rootUrl: /api/book-service
+
 apm:
   enabled: "true"
   serverUrl: "https://elk.onintranet.com:8200"
