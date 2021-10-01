@@ -1,5 +1,5 @@
 echoSql: False
-rootUrl: /api/book-service
+rootPath: /api/book-service
 
 apm:
   enabled: "true"
