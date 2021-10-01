@@ -84,9 +84,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-connection_string = settings.database_uri.format(user=settings.database_user, password=settings.database_pass)
+connection_string = settings.database_uri.format(
+    user=settings.database_user, password=settings.database_pass
+)
 connect_args = {"check_same_thread": False}
-engine = create_engine(connection_string, echo=settings.echo_sql, connect_args=connect_args)
+engine = create_engine(
+    connection_string, echo=settings.echo_sql, connect_args=connect_args
+)
 
 
 def get_db_session():
@@ -96,13 +100,19 @@ def get_db_session():
 
 def is_database_online(session: Session = Depends(get_db_session)):
     try:
-        session.execute('SELECT 1')
+        session.execute("SELECT 1")
     except Exception:
         return False
     return True
 
 
+@app.on_event("startup")
+def on_startup():
+    SQLModel.metadata.create_all(engine)
+
+
 app.add_api_route("/healthz", health([is_database_online]))
+
 
 @app.get("/")
 async def read_root():
