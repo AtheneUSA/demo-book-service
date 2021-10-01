@@ -2,5 +2,5 @@ apiVersion: v2
 name: book-service
 description: A demo microservice
 type: application
-version: 0.1.0
-appVersion: "af6b30c"
+version: 0.1.1
+appVersion: "79f23f6"

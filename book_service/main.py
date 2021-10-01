@@ -67,7 +67,7 @@ logger.setLevel(logging.DEBUG)
 
 settings = Settings()
 apm = make_apm_client()
-app = FastAPI(root_path=settings.root_path)
+app = FastAPI(root_path=settings.root_path, openapi_prefix=settings.root_path)
 app.add_middleware(ElasticAPM, client=apm)
 
 origins = [
@@ -83,7 +83,7 @@ app.add_middleware(
 )
 
 connect_args = {"check_same_thread": False}
-engine = create_engine(settings.database_uri, echo=False, connect_args=connect_args)
+engine = create_engine(settings.database_uri, echo=settings.echo_sql, connect_args=connect_args)
 
 
 def get_db_session():
