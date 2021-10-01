@@ -1,6 +1,11 @@
 echoSql: False
 rootPath: /api/book-service
 
+# Should get these from a secret store, these are just base64...
+db:
+  username: Ym9vay1kYi11c2VyCg==
+  password: YWJjMTIzIQo=
+
 apm:
   enabled: "true"
   serverUrl: "https://elk.onintranet.com:8200"

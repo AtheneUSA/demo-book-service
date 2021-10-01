@@ -13,7 +13,7 @@ ENV PIP_DEFAULT_TIMEOUT=100 \
     PIP_NO_CACHE_DIR=1 \
     POETRY_VERSION=1.1.9
 
-RUN apk add --no-cache build-base alpine-sdk libffi-dev openssl-dev
+RUN apk add --no-cache build-base alpine-sdk libffi-dev openssl-dev python3-dev postgresql-dev
 
 RUN pip install "poetry==$POETRY_VERSION"
 RUN python -m venv /venv
@@ -26,7 +26,7 @@ RUN poetry build && /venv/bin/pip install dist/*.whl
 
 FROM base as final
 
-RUN apk add --no-cache libffi
+RUN apk add --no-cache libffi libpq
 
 COPY --from=builder /venv /venv
 COPY docker-entrypoint.sh logging.conf ./

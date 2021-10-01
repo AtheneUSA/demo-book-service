@@ -13,6 +13,8 @@ from sqlmodel import Field, Relationship, Session, SQLModel, create_engine, sele
 
 class Settings(BaseSettings):
     database_uri: str = "sqlite:///./books.db"
+    database_user: Optional[str]
+    database_pass: Optional[str]
     echo_sql: bool = False
     root_path: Optional[str]
 
@@ -82,8 +84,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+connection_string = settings.database_uri.format(user=settings.database_user, password=settings.database_pass)
 connect_args = {"check_same_thread": False}
-engine = create_engine(settings.database_uri, echo=settings.echo_sql, connect_args=connect_args)
+engine = create_engine(connection_string, echo=settings.echo_sql, connect_args=connect_args)
 
 
 def get_db_session():

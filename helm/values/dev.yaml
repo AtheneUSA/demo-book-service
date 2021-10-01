@@ -1,2 +1,4 @@
+namespace: "microservice-demo"
 environment: "dev"
 replicaCount: 2
+efsId: "fs-525949e6"
