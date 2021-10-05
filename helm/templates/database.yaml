@@ -6,7 +6,7 @@ provisioner: efs.csi.aws.com
 parameters:
   provisioningMode: efs-ap
   fileSystemId: {{ .Values.efsId | quote }}
-  directoryPerms: "700"
+  directoryPerms: "777"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -19,66 +19,84 @@ spec:
   resources:
     requests:
       storage: 5Gi
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: postgres
-  labels:
-    app: postgres
-spec:
-  type: ClusterIP
-  ports:
-  - port: 5432
-  selector:
-    app: postgres
----
-apiVersion: apps/v1
-kind: StatefulSet
-metadata:
-  name: book-database
-spec:
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: book-database
-      app.kubernetes.io/instance: book-database
-  serviceName: postgres
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        app.kubernetes.io/name: book-database
-        app.kubernetes.io/instance: book-database
-        app.kubernetes.io/version: {{ .Chart.AppVersion }}
-        app.kubernetes.io/component: database
-        app.kubernetes.io/part-of: demo-microservice
-        app.kubernetes.io/managed-by: helm
-        env: {{ .Values.environment }}
-        snow.athene.com/business-owner: John_Hicklin
-        snow.athene.com/it-owner: Ethan_Harstad
-        snow.athene.com/app-support-group: SMR-TechnicalServices
-        snow.athene.com/business-code: "67333"
-        snow.athene.com/project-billing-code: BAU
-        snow.athene.com/business_criticality: "4"
-    spec:
-      containers:
-      - name: database
-        image: dtr-prod-virtual.artifactory.onintranet.com/_/14-alpine
-        env:
-        - name: POSTGRES_USER
-          valueFrom:
-            secretKeyRef:
-              name: books-database
-              key: username
-        - name: POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: books-database
-              key: password
-        volumeMounts:
-        - name: persistent-storage
-          mountPath: /var/lib/postgresql/data
-      volumes:
-      - name: persistent-storage
-        persistentVolumeClaim:
-          claimName: efs-claim
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: postgres
+#   labels:
+#     app: postgres
+# spec:
+#   type: ClusterIP
+#   ports:
+#   - port: 5432
+#   selector:
+#     app: postgres
+# ---
+# apiVersion: apps/v1
+# kind: StatefulSet
+# metadata:
+#   name: book-database
+# spec:
+#   selector:
+#     matchLabels:
+#       app.kubernetes.io/name: book-database
+#       app.kubernetes.io/instance: book-database
+#   serviceName: postgres
+#   replicas: 1
+#   template:
+#     metadata:
+#       labels:
+#         app.kubernetes.io/name: book-database
+#         app.kubernetes.io/instance: book-database
+#         app.kubernetes.io/version: {{ .Chart.AppVersion }}
+#         app.kubernetes.io/component: database
+#         app.kubernetes.io/part-of: demo-microservice
+#         app.kubernetes.io/managed-by: helm
+#         env: {{ .Values.environment }}
+#         snow.athene.com/business-owner: John_Hicklin
+#         snow.athene.com/it-owner: Ethan_Harstad
+#         snow.athene.com/app-support-group: SMR-TechnicalServices
+#         snow.athene.com/business-code: "67333"
+#         snow.athene.com/project-billing-code: BAU
+#         snow.athene.com/business_criticality: "4"
+#     spec:
+#       securityContext:
+#         fsGroup: 5000
+#         supplementalGroups:
+#         - 5000
+#       containers:
+#       - name: database
+#         image: dtr-prod-virtual.artifactory.onintranet.com/postgres:14
+#         args:
+#         - --user
+#         - 5000:5000
+#         env:
+#         - name: PGDATA
+#           value: /var/lib/postgresql/data/pgdata
+#         - name: POSTGRES_USER
+#           valueFrom:
+#             secretKeyRef:
+#               name: books-database
+#               key: username
+#         - name: POSTGRES_PASSWORD
+#           valueFrom:
+#             secretKeyRef:
+#               name: books-database
+#               key: password
+#         ports:
+#         - containerPort: 5432
+#         resources:
+#           limits:
+#             cpu: 2000m
+#             memory: 1024Mi
+#           requests:
+#             cpu: 500m
+#             memory: 128Mi
+#         volumeMounts:
+#         - name: persistent-storage
+#           mountPath: /var/lib/postgresql/data
+#       volumes:
+#       - name: persistent-storage
+#         persistentVolumeClaim:
+#           claimName: efs-claim

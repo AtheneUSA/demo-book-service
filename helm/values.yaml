@@ -1,5 +1,6 @@
 echoSql: False
 rootPath: /api/book-service
+databaseUri: sqlite:////app/data/books.db
 
 # Should get these from a secret store, these are just base64...
 db:

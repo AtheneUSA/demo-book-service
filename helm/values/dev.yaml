@@ -1,4 +1,5 @@
 namespace: "microservice-demo"
 environment: "dev"
 replicaCount: 2
-efsId: "fs-525949e6"
+efsId: "fs-487565fc"
+# databaseUri: "postgresql+psycopg2://{user}:{password}@postgres.microservice-demo.svc.cluster.local"
