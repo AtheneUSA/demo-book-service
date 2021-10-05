@@ -13,8 +13,12 @@ $env:ELASTIC_APM_LOG_LEVEL = "info"  # One of: (off|critical|error|warning|info|
 $env:ELASTIC_APM_RECORDING = "true"  # (true|false)
 $env:ELASTIC_APM_SERVER_URL = "https://elk.onintranet.com:8200"
 <<<<<<< HEAD
+<<<<<<< HEAD
 $env:ELASTIC_APM_SERVICE_NAME = "book-service-$($($(whoami) -Split '\\')[-1])"
 =======
 $env:ELASTIC_APM_SERVICE_NAME = "demo-book-service-$($($(whoami) -Split '\\')[-1])"
 >>>>>>> 8720c01 (add sample environment variables for Windows deploy)
+=======
+$env:ELASTIC_APM_SERVICE_NAME = "book-service-$($($(whoami) -Split '\\')[-1])"
+>>>>>>> 2b28d80 (update service name)
 $env:ELASTIC_APM_VERIFY_SERVER_CERT = "False"  # (True|False)
