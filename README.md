@@ -46,7 +46,10 @@ Deploy to dev environment in EKS
 ```bash
 helm upgrade book-service-dev helm --values helm/values/dev.yaml -i -n microservice-demo
 ```
+<<<<<<< HEAD
 
+=======
+>>>>>>> 759f8275a4274c3ae07de69dae5eb3cf014891d2
 ## APM
 
 To use Elastic APM, set environment variables prior to starting the microservice with `poetry run uvicorn ...` or `poetry run start`. The example environment variables included with this demo will create a unique instance of `book-service` in Elastic APM with your user ID appended (i.e., `book-service-e99999`).
