@@ -13,10 +13,13 @@ spec:
     metadata:
       annotations:
         sidecar.istio.io/rewriteAppHTTPProbers: "false"
-        co.elastic.logs.book-service/enabled: "true"
-        co.elastic.logs.book-service/json.add_error_key: "true"
-        co.elastic.logs.book-service/json.keys_under_root: "true"
-        com.onintranet.elk/service_id: "c02fe809-89f3-49f6-8973-5b0e06c11424"
+        co.elastic.logs.book-service/enabled: 'true'
+        co.elastic.logs.book-service/json.add_error_key: 'true'
+        co.elastic.logs.book-service/json.expand_keys: 'true'
+        co.elastic.logs.book-service/json.keys_under_root: 'true'
+        co.elastic.logs.book-service/json.ignore_decoding_error: 'true'
+        co.elastic.logs.book-service/json.overwrite_keys: 'true'
+        co.elastic.logs.book-service/processors.add_labels.labels._data_stream: 'microservice-demo'
       labels:
         app.kubernetes.io/name: book-service
         app.kubernetes.io/instance: {{ .Release.Name }}
